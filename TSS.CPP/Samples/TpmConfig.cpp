@@ -9,6 +9,7 @@
 
 using namespace std;
 
+// All implemented algorithms
 vector<TPM_ALG_ID> TpmConfig::ImplementedAlgs;
 
 // Implemented hash algorithms

@@ -48,6 +48,7 @@ Samples::Samples()
     // Install callbacks to collect command execution statistics.
     StartCallbacks();
 
+    // Initialize the TPM configuration by fetching the TPM device/simulator's capabilities.
     TpmConfig::Init(tpm);
 } // Samples::Samples()
 
