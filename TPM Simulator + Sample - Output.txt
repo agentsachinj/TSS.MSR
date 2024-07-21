@@ -1,0 +1,1183 @@
+No dangling HMAC_SESSION handles
+No dangling TRANSIENT handles
+No dangling PERSISTENT handles
+No dangling NV_INDEX handles
+
+================================================================================
+        Installing callback
+================================================================================
+
+Random bytes: 02c8d0f4 afe9e2a0 668a5697 0f266568 3b1acb37
+As expected, the TPM returned an error:TPM Error - TPM_RC::VALUE: The file pointer cannot be set on the specified device or file.
+0000000000000000
+Command failed, as expected.
+Text form of pcrVal
+PCR_ReadResponse {
+    UINT32 pcrUpdateCounter = 24 (0x18)
+    UINT32 pcrSelectionOutCount = 1 (0x01)
+    TPMS_PCR_SELECTION[] pcrSelectionOut = [
+        TPMS_PCR_SELECTION {
+            TPM_ALG_ID hash = SHA (0x04)
+            UINT8 sizeofSelect = 3 (0x03)
+            BYTE[] pcrSelect = [010000]
+        }
+    ]
+    UINT32 pcrValuesCount = 1 (0x01)
+    TPM2B_DIGEST[] pcrValues = [
+        TPM2B_DIGEST {
+            UINT16 size = 20 (0x14)
+            BYTE[] buffer = [A621D402 FADC3901 72B432D2 6EDF3B2B 6B65E1DD]
+        }
+    ]
+}
+JSON form
+{
+    "pcrUpdateCounter" : 24,
+    "pcrSelectionOutCount" : 1,
+    "pcrSelectionOut" : [
+        {
+            "hash" : 4,
+            "sizeofSelect" : 3,
+            "pcrSelect" : [1, 0, 0]
+        }
+    ],
+    "pcrValuesCount" : 1,
+    "pcrValues" : [
+        {
+            "size" : 20,
+            "buffer" : [166, 33, 212, 2, 250, 220, 57, 1, 114, 180, 50, 210, 110, 223, 59, 43, 107, 101, 225, 221]
+        }
+    ]
+}
+TPM Binary form:
+00000018 00000001 00040301 00000000 00010014 a621d402 fadc3901 72b432d2 6edf3b2b 6b65e1dd
+JSON Deserialization succeeded
+Binary serialization succeeded
+Data read from nv-slot:   ffffffff ffffffff ffffffff c89989e6 567e9bb3 4b7b2bee 4e37b180 663faa05 1bc65299 2a0ac724 b29efa16 8a14d0c3 9595
+New RSA primary key
+TPMT_PUBLIC {
+    TPM_ALG_ID type = FIRST (0x01)
+    TPM_ALG_ID nameAlg = SHA (0x04)
+    TPMA_OBJECT objectAttributes = fixedTPM | fixedParent | sensitiveDataOrigin | userWithAuth | sign (0x040072)
+    UINT16 authPolicySize = 0 (0x00)
+    BYTE[] authPolicy = []
+    TPMU_PUBLIC_PARMS parameters = TPMS_RSA_PARMS {
+        TPMT_SYM_DEF_OBJECT symmetric = TPMT_SYM_DEF_OBJECT {
+            TPM_ALG_ID algorithm = _NULL (0x10)
+            UINT16 keyBits = 0 (0x00)
+            TPM_ALG_ID mode = _NULL (0x10)
+        }
+        TPM_ALG_ID schemeScheme = RSASSA (0x14)
+        TPMU_ASYM_SCHEME scheme = TPMS_SIG_SCHEME_RSASSA {
+            TPM_ALG_ID hashAlg = SHA (0x04)
+        }
+        UINT16 keyBits = 1024 (0x0400)
+        UINT32 exponent = 65537 (0x010001)
+    }
+    TPMU_PUBLIC_ID unique = TPM2B_PUBLIC_KEY_RSA {
+        UINT16 size = 128 (0x80)
+        BYTE[] buffer = [A5877AAE F3DD4C5D 2EDD8A33 ECF0EF4C ... C33F6FB4 508E95E3 023714DB 208F1CFF]
+    }
+}
+Signature:
+TPMS_SIGNATURE_RSASSA {
+    TPM_ALG_ID hash = SHA (0x04)
+    UINT16 sigSize = 128 (0x80)
+    BYTE[] sig = [
+        2DBCF09F 7D7B65E7 7D307181 B4FF4EAA 6196B7DC 35E1BB6E 167177FF 6EAA89A8
+        D6C3476E CC8EF269 108D7DFD E56B64CF DE485BB9 9C20B0A1 034F8E14 57E85FF8
+        9E0C9BAD FBA74A44 771D1E6A C3122BDE 431C2BA1 F31E08AA 97B6E10D 4AD2F8D5
+        19AD657C 8E48A4D5 79B0065B C2737702 98334E09 286A194E 443E0548 A218BEAE
+    ]
+}
+Signature is OK
+PCR after policy-based extend:
+TPMT_HA {
+    TPM_ALG_ID hashAlg = SHA (0x04)
+    TPM_ALG_ID hashAlg = 20 (0x14)
+    BYTE[] digest = [3F295464 53678B85 5931C174 A97D6C08 94B8F546]
+}
+Policy failed after PCR-extend, as expected.
+PolicyOR (branch1) digest is as expected:
+ea8a9ae3 d8bfcca9 55bc268e 5670dc30 68f9d2d8
+PolicyOR (branch1) digest is as expected:
+ea8a9ae3 d8bfcca9 55bc268e 5670dc30 68f9d2d8
+
+================================================================================
+        Rand
+================================================================================
+
+random bytes:      6d83d8d6 1b42797f 4bd07e43 29353d55 d0168a1d
+more random bytes: 66cde5a2 36263c3c b4234971 59128f09 b0488a1e
+
+================================================================================
+        Dictionary Attack
+================================================================================
+
+
+================================================================================
+        Hash
+================================================================================
+
+Simple Hashing
+Hash:: SHA
+Expected:      5d211bad 8f4ee70e 16c7d343 a838fc34 4a1ed961
+TPM generated: 5d211bad 8f4ee70e 16c7d343 a838fc34 4a1ed961
+Hash:: SHA256
+Expected:      7192385c 3c0605de 55bb9476 ce1d9074 8190ecb3 2a8eed7f 5207b30c f6a1fe89
+TPM generated: 7192385c 3c0605de 55bb9476 ce1d9074 8190ecb3 2a8eed7f 5207b30c f6a1fe89
+Hash sequences
+Hash:: SHA
+Expected:      2caa4b75 8b92ce5a b5c947a7 7fd9af7a 0cf6dd77
+TPM generated: 2caa4b75 8b92ce5a b5c947a7 7fd9af7a 0cf6dd77
+Hash:: SHA256
+Expected:      eff4f285 bdd27232 14f91b59 3878a968 353e1919 cd7d2f69 38cd5150 c584dc19
+TPM generated: eff4f285 bdd27232 14f91b59 3878a968 353e1919 cd7d2f69 38cd5150 c584dc19
+EventSequenceComplete gives expected answer:
+TPMT_HA {
+    TPM_ALG_ID hashAlg = SHA (0x04)
+    TPM_ALG_ID hashAlg = 20 (0x14)
+    BYTE[] digest = [8D9EDD3E BFFAE364 F0A2A01B 24025C2C 446BAEB8]
+}
+
+================================================================================
+        HMAC
+================================================================================
+
+HMAC[SHA1] of 01020304 05060708 09000102 03040506 07080900
+with key      05040302 0100
+           =  3a11b326 a5844fba d023c515 69b52afa 6a09785f
+HMAC[SHA1] of 01020304 05060708 09000102 03040506 07080900
+with key      05040302 0100
+           =  3a11b326 a5844fba d023c515 69b52afa 6a09785f
+HMAC[SHA1] of 01020304 05060708 09000102 03040506 07080900
+with key      05040302 0100
+           =  3a11b326 a5844fba d023c515 69b52afa 6a09785f
+
+================================================================================
+        PCR
+================================================================================
+
+PCR after event:
+TPMT_HA {
+    TPM_ALG_ID hashAlg = SHA (0x04)
+    TPM_ALG_ID hashAlg = 20 (0x14)
+    BYTE[] digest = [70378071 98C22A7D 2B080737 1D763779 A84FDFCF]
+}
+Initial value:
+PCR_ReadResponse {
+    UINT32 pcrUpdateCounter = 36 (0x24)
+    UINT32 pcrSelectionOutCount = 2 (0x02)
+    TPMS_PCR_SELECTION[] pcrSelectionOut = [
+        TPMS_PCR_SELECTION {
+            TPM_ALG_ID hash = SHA (0x04)
+            UINT8 sizeofSelect = 3 (0x03)
+            BYTE[] pcrSelect = [010000]
+        }
+        TPMS_PCR_SELECTION {
+            TPM_ALG_ID hash = SHA256 (0x0B)
+            UINT8 sizeofSelect = 3 (0x03)
+            BYTE[] pcrSelect = [020000]
+        }
+    ]
+    UINT32 pcrValuesCount = 2 (0x02)
+    TPM2B_DIGEST[] pcrValues = [
+        TPM2B_DIGEST {
+            UINT16 size = 20 (0x14)
+            BYTE[] buffer = [4EA5F314 9103C60E DB4ED9AF 9D7D8C98 DE939F86]
+        }
+        TPM2B_DIGEST {
+            UINT16 size = 32 (0x20)
+            BYTE[] buffer = [00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000]
+        }
+    ]
+}
+SHA1 After Event:
+TPM2B_DIGEST {
+    UINT16 size = 20 (0x14)
+    BYTE[] buffer = [286653E5 9272EB50 5108CDB5 A1099018 5AB286A7]
+}
+SHA1 After Extend:
+TPM2B_DIGEST {
+    UINT16 size = 20 (0x14)
+    BYTE[] buffer = [C6C9EC16 DA7B2832 E734CA3A DE5E0EB2 A104A94F]
+}
+PCR values correct
+Resettable PCR before reset: c2e7a22d bc3f2cba 56ec872f 28dc57fc 87a1e607
+After reset:                 00000000 00000000 00000000 00000000 00000000
+
+================================================================================
+        Locality
+================================================================================
+
+PCR before reset at locality 2: 47a4b642 309e3316 b9af42ec 256a7375 159d8fe6
+PCR After reset at locality 2:  00000000 00000000 00000000 00000000 00000000
+
+================================================================================
+        GetCapability
+================================================================================
+
+Algorithms:
+00000000000FIRST: asymmetric | object
+0000000000000SHA: hash
+000000000000HMAC: hash | signing
+0000000000000AES: symmetric
+000000000000MGF1: hash | method
+0000000KEYEDHASH: hash | object | signing | encrypting
+0000000000000XOR: symmetric | hash
+0000000000SHA256: hash
+0000000000SHA384: hash
+0000000000RSASSA: asymmetric | signing
+00000000000RSAES: asymmetric | encrypting
+0000000000RSAPSS: asymmetric | signing
+000000000000OAEP: asymmetric | encrypting
+00000000000ECDSA: asymmetric | signing | method
+000000000000ECDH: asymmetric | method
+00000000000ECDAA: asymmetric | signing
+0000000ECSCHNORR: asymmetric | signing
+00KDF1_SP800_56A: hash | method
+00KDF1_SP800_108: hash | method
+0000000000000ECC: asymmetric | object
+0000000SYMCIPHER: object
+0000000000000CTR: symmetric | encrypting
+0000000000000OFB: symmetric | encrypting
+0000000000000CBC: symmetric | encrypting
+0000000000000CFB: symmetric | encrypting
+0000000000000ECB: symmetric | encrypting
+Commands:
+Command:FIRST: nv |
+Command:EvictControl: nv |
+Command:HierarchyControl: nv | extensive |
+Command:NV_UndefineSpace: nv |
+Command:ChangeEPS: nv | extensive |
+Command:ChangePPS: nv | extensive |
+Command:Clear: nv | extensive |
+Command:ClearControl: nv |
+Command:ClockSet: nv |
+Command:HierarchyChangeAuth: nv |
+Command:NV_DefineSpace: nv |
+Command:PCR_Allocate: nv |
+Command:PCR_SetAuthPolicy: nv |
+Command:PP_Commands: nv |
+Command:SetPrimaryPolicy: nv |
+Command:ClockRateAdjust:
+Command:CreatePrimary: rHandle
+Command:NV_GlobalWriteLock:
+Command:GetCommandAuditDigest: nv |
+Command:NV_Increment: nv |
+Command:NV_SetBits: nv |
+Command:NV_Extend: nv |
+Command:NV_Write: nv |
+Command:NV_WriteLock: nv |
+Command:DictionaryAttackLockReset: nv |
+Command:DictionaryAttackParameters: nv |
+Command:NV_ChangeAuth: nv |
+Command:PCR_Event: nv |
+Command:PCR_Reset: nv |
+Command:SequenceComplete: flushed |
+Command:SetAlgorithmSet: nv |
+Command:SetCommandCodeAuditStatus: nv |
+
+Command:IncrementalSelfTest: nv
+Command:SelfTest: nv
+Command:Startup: nv
+Command:Shutdown: nv
+Command:StirRandom: nv
+Command:ActivateCredential:
+Command:Certify:
+Command:PolicyNV:
+Command:CertifyCreation:
+Command:Duplicate:
+Command:GetTime:
+Command:GetSessionAuditDigest:
+Command:NV_Read:
+Command:NV_ReadLock:
+Command:ObjectChangeAuth:
+Command:PolicySecret:
+Command:Rewrap:
+Command:Create:
+Command:ECDH_ZGen:
+Command:HMAC:
+Command:Import:
+Command:Load: rHandle
+Command:Quote:
+Command:RSA_Decrypt:
+Command:HMAC_Start: rHandle
+Command:SequenceUpdate:
+Command:Sign:
+Command:Unseal:
+Command:PolicySigned:
+Command:ContextLoad: rHandle
+Command:ContextSave:
+Command:ECDH_KeyGen:
+
+Command:EncryptDecrypt:
+Command:FlushContext:
+Command:LoadExternal: rHandle
+Command:MakeCredential:
+Command:NV_ReadPublic:
+Command:PolicyAuthorize:
+Command:PolicyAuthValue:
+Command:PolicyCommandCode:
+Command:PolicyCounterTimer:
+Command:PolicyCpHash:
+Command:PolicyLocality:
+Command:PolicyNameHash:
+Command:PolicyOR:
+Command:PolicyTicket:
+Command:ReadPublic:
+Command:RSA_Encrypt:
+Command:StartAuthSession: rHandle
+Command:VerifySignature:
+Command:ECC_Parameters:
+Command:GetCapability:
+Command:GetRandom:
+Command:GetTestResult:
+Command:Hash:
+Command:PCR_Read:
+Command:PolicyPCR:
+Command:PolicyRestart:
+Command:ReadClock:
+Command:PCR_Extend: nv |
+Command:PCR_SetAuthValue:
+Command:NV_Certify:
+Command:EventSequenceComplete: nv | flushed |
+Command:HashSequenceStart: rHandle
+
+Command:PolicyPhysicalPresence:
+Command:PolicyDuplicationSelect:
+Command:PolicyGetDigest:
+Command:TestParms:
+Command:Commit:
+Command:PolicyPassword:
+Command:ZGen_2Phase:
+Command:EC_Ephemeral:
+Command:PolicyNvWritten:
+Command:: V
+
+PCRS:
+SHA     0 1 2 3 4 5 6 7 8 9 a b c d e f 10 11 12 13 14 15 16 17
+SHA256  0 1 2 3 4 5 6 7 8 9 a b c d e f 10 11 12 13 14 15 16 17
+SHA384  0 1 2 3 4 5 6 7 8 9 a b c d e f 10 11 12 13 14 15 16 17
+
+================================================================================
+        NV
+================================================================================
+
+Data read from nv-slot:   01020304 05040302 01ffffff ffffffff
+NV Slot public area:
+NV_ReadPublicResponse {
+    TPMS_NV_PUBLIC nvPublic = TPMS_NV_PUBLIC {
+        TPM_HANDLE nvIndex = TPM_HANDLE {
+            UINT32 handle = 16779677 (0x0100099D)
+        }
+        TPM_ALG_ID nameAlg = SHA256 (0x0B)
+        TPMA_NV attributes = AUTHWRITE | AUTHREAD | WRITTEN (0x20040004)
+        UINT16 authPolicySize = 0 (0x00)
+        BYTE[] authPolicy = []
+        UINT16 dataSize = 16 (0x10)
+    }
+    UINT16 nvNameSize = 34 (0x22)
+    BYTE[] nvName = [000B7716 B7914FBF B3205FE5 C4B2D4D5 628B8327 063A0C16 CCD8A519 52DF57449100]
+}
+Initial counter data:     00000000 00000001
+After 5 increments:       00000000 00000006
+Bit setting:
+   0 : 00000000 00000001
+   1 : 00000000 00000003
+   2 : 00000000 00000007
+   3 : 00000000 0000000f
+   4 : 00000000 0000001f
+   5 : 00000000 0000003f
+   6 : 00000000 0000007f
+   7 : 00000000 000000ff
+   8 : 00000000 000001ff
+   9 : 00000000 000003ff
+  10 : 00000000 000007ff
+  11 : 00000000 00000fff
+  12 : 00000000 00001fff
+  13 : 00000000 00003fff
+  14 : 00000000 00007fff
+  15 : 00000000 0000ffff
+  16 : 00000000 0001ffff
+  17 : 00000000 0003ffff
+  18 : 00000000 0007ffff
+  19 : 00000000 000fffff
+  20 : 00000000 001fffff
+  21 : 00000000 003fffff
+  22 : 00000000 007fffff
+  23 : 00000000 00ffffff
+  24 : 00000000 01ffffff
+  25 : 00000000 03ffffff
+  26 : 00000000 07ffffff
+  27 : 00000000 0fffffff
+  28 : 00000000 1fffffff
+  29 : 00000000 3fffffff
+  30 : 00000000 7fffffff
+  31 : 00000000 ffffffff
+  32 : 00000001 ffffffff
+  33 : 00000003 ffffffff
+  34 : 00000007 ffffffff
+  35 : 0000000f ffffffff
+  36 : 0000001f ffffffff
+  37 : 0000003f ffffffff
+  38 : 0000007f ffffffff
+  39 : 000000ff ffffffff
+  40 : 000001ff ffffffff
+  41 : 000003ff ffffffff
+  42 : 000007ff ffffffff
+  43 : 00000fff ffffffff
+  44 : 00001fff ffffffff
+  45 : 00003fff ffffffff
+  46 : 00007fff ffffffff
+  47 : 0000ffff ffffffff
+  48 : 0001ffff ffffffff
+  49 : 0003ffff ffffffff
+  50 : 0007ffff ffffffff
+  51 : 000fffff ffffffff
+  52 : 001fffff ffffffff
+  53 : 003fffff ffffffff
+  54 : 007fffff ffffffff
+  55 : 00ffffff ffffffff
+  56 : 01ffffff ffffffff
+  57 : 03ffffff ffffffff
+  58 : 07ffffff ffffffff
+  59 : 0fffffff ffffffff
+  60 : 1fffffff ffffffff
+  61 : 3fffffff ffffffff
+  62 : 7fffffff ffffffff
+  63 : ffffffff ffffffff
+Extended NV slot:87a0afaa 64b1e8f9 441b4161 1aeedd7e 5dbdd300
+Deleted the NV slot
+
+================================================================================
+        PrimaryKeys
+================================================================================
+
+New RSA primary key
+TPMT_PUBLIC {
+    TPM_ALG_ID type = FIRST (0x01)
+    TPM_ALG_ID nameAlg = SHA (0x04)
+    TPMA_OBJECT objectAttributes = fixedTPM | fixedParent | sensitiveDataOrigin | userWithAuth | sign (0x040072)
+    UINT16 authPolicySize = 0 (0x00)
+    BYTE[] authPolicy = []
+    TPMU_PUBLIC_PARMS parameters = TPMS_RSA_PARMS {
+        TPMT_SYM_DEF_OBJECT symmetric = TPMT_SYM_DEF_OBJECT {
+            TPM_ALG_ID algorithm = _NULL (0x10)
+            UINT16 keyBits = 0 (0x00)
+            TPM_ALG_ID mode = _NULL (0x10)
+        }
+        TPM_ALG_ID schemeScheme = RSASSA (0x14)
+        TPMU_ASYM_SCHEME scheme = TPMS_SIG_SCHEME_RSASSA {
+            TPM_ALG_ID hashAlg = SHA256 (0x0B)
+        }
+        UINT16 keyBits = 1024 (0x0400)
+        UINT32 exponent = 65537 (0x010001)
+    }
+    TPMU_PUBLIC_ID unique = TPM2B_PUBLIC_KEY_RSA {
+        UINT16 size = 128 (0x80)
+        BYTE[] buffer = [E052EECA 9F5FA1C4 C14D5D87 4EFDF188 ... B272CC65 63DDB828 3DE5EB2F 3A44F731]
+    }
+}
+Name of new key:
+ Returned by TPM 0004825e e69d4a39 b4814559 d14cdab9 500d0400 9770
+ Calculated      0004825e e69d4a39 b4814559 d14cdab9 500d0400 9770
+ Set in handle   0004825e e69d4a39 b4814559 d14cdab9 500d0400 9770
+Data to be signed:ba7816bf 8f01cfea 414140de 5dae2223 b00361a3 96177a9c b410ff61 f20015ad
+Signature:
+TPMS_SIGNATURE_RSASSA {
+    TPM_ALG_ID hash = SHA256 (0x0B)
+    UINT16 sigSize = 128 (0x80)
+    BYTE[] sig = [7D42577A 2D16A8D5 1AB6A53C DF872CC2 ... 61E7A0D5 8FF016DD 467A528D 3E3A74B8]
+}
+Public part of persistent primary
+ReadPublicResponse {
+    TPMT_PUBLIC outPublic = TPMT_PUBLIC {
+        TPM_ALG_ID type = FIRST (0x01)
+        TPM_ALG_ID nameAlg = SHA (0x04)
+        TPMA_OBJECT objectAttributes = fixedTPM | fixedParent | sensitiveDataOrigin | userWithAuth | sign (0x040072)
+        UINT16 authPolicySize = 0 (0x00)
+        BYTE[] authPolicy = []
+        TPMU_PUBLIC_PARMS parameters = TPMS_RSA_PARMS {
+            TPMT_SYM_DEF_OBJECT symmetric = TPMT_SYM_DEF_OBJECT {
+                TPM_ALG_ID algorithm = _NULL (0x10)
+                UINT16 keyBits = 0 (0x00)
+                TPM_ALG_ID mode = _NULL (0x10)
+            }
+            TPM_ALG_ID schemeScheme = RSASSA (0x14)
+            TPMU_ASYM_SCHEME scheme = TPMS_SIG_SCHEME_RSASSA {
+                TPM_ALG_ID hashAlg = SHA256 (0x0B)
+            }
+            UINT16 keyBits = 1024 (0x0400)
+            UINT32 exponent = 65537 (0x010001)
+        }
+        TPMU_PUBLIC_ID unique = TPM2B_PUBLIC_KEY_RSA {
+            UINT16 size = 128 (0x80)
+            BYTE[] buffer = [E052EECA 9F5FA1C4 C14D5D87 4EFDF188 ... B272CC65 63DDB828 3DE5EB2F 3A44F731]
+        }
+    }
+    UINT16 nameSize = 22 (0x16)
+    BYTE[] name = [0004825E E69D4A39 B4814559 D14CDAB9 500D04009770]
+    UINT16 qualifiedNameSize = 22 (0x16)
+    BYTE[] qualifiedName = [000423A1 F6A91FF0 E33310B5 9CE5E0ED 54C7D989C760]
+}
+================================================================================
+        AuthSessions
+================================================================================
+
+
+================================================================================
+        Async
+================================================================================
+
+Waiting for GetRandom().
+Done
+Async random data: 3a5bddbe 5fa6e5b7 5ce6af3b ccac3477
+Waiting for CreatePrimary().....
+Done
+Asynchronously created primary key name:
+00045a99 22ebe5e1 3a1aa10d c774db96 9cafc89a 00d6
+
+================================================================================
+        PolicySimplest
+================================================================================
+
+Calculated policy digest  : 84647ec4 027f93c6 5afd6a55 a80873c8 db91401f
+TPM reported policy digest: 84647ec4 027f93c6 5afd6a55 a80873c8 db91401f
+
+================================================================================
+        PolicyLocality
+================================================================================
+
+Calculated policy digest  : 11389b1b fb3f2d88 7f1c0e57 ce0fc8a6 b9dc0a56
+TPM reported policy digest: 11389b1b fb3f2d88 7f1c0e57 ce0fc8a6 b9dc0a56
+
+================================================================================
+        PolicyPCR
+================================================================================
+
+Calculated policy digest  : f938093b 35ff494e 3c02eec2 ceca6268 d95c34b0
+TPM reported policy digest: f938093b 35ff494e 3c02eec2 ceca6268 d95c34b0
+
+================================================================================
+        Child Keys
+================================================================================
+
+New RSA primary storage key
+TPMT_PUBLIC {
+    TPM_ALG_ID type = FIRST (0x01)
+    TPM_ALG_ID nameAlg = SHA (0x04)
+    TPMA_OBJECT objectAttributes = fixedTPM | fixedParent | sensitiveDataOrigin | userWithAuth | restricted | decrypt (0x030072)
+    UINT16 authPolicySize = 0 (0x00)
+    BYTE[] authPolicy = []
+    TPMU_PUBLIC_PARMS parameters = TPMS_RSA_PARMS {
+        TPMT_SYM_DEF_OBJECT symmetric = TPMT_SYM_DEF_OBJECT {
+            TPM_ALG_ID algorithm = AES (0x06)
+            UINT16 keyBits = 128 (0x80)
+            TPM_ALG_ID mode = CFB (0x43)
+        }
+        TPM_ALG_ID schemeScheme = _NULL (0x10)
+        TPMU_ASYM_SCHEME scheme = TPMS_NULL_ASYM_SCHEME {
+        }
+        UINT16 keyBits = 2048 (0x0800)
+        UINT32 exponent = 65537 (0x010001)
+    }
+    TPMU_PUBLIC_ID unique = TPM2B_PUBLIC_KEY_RSA {
+        UINT16 size = 256 (0x0100)
+        BYTE[] buffer = [DC1F4034 8360D054 10C257EE 3BAB2203 ... 748677F9 C6B78570 F82951D2 9D72B4E5]
+    }
+}
+Data to be signed:70378071 98c22a7d 2b080737 1d763779 a84fdfcf
+Signature:
+TPMS_SIGNATURE_RSASSA {
+    TPM_ALG_ID hash = SHA (0x04)
+    UINT16 sigSize = 256 (0x0100)
+    BYTE[] sig = [7B6002C2 7A136027 73D6FC2A C678907F ... F8FDEB8A 5FDC9176 AEC13524 DF7D04F0]
+}
+Signature verification succeeded
+Signature verification of bad signature failed, as expected
+
+================================================================================
+        PolicyOR
+================================================================================
+
+PolicyPcr failed, as expected
+
+================================================================================
+        CounterTimer
+================================================================================
+
+TPM-time (reading for ~5 seconds)
+(Sytem Time(s), TpmTime(ms)) = (0, 1807)
+(Sytem Time(s), TpmTime(ms)) = (1, 2821)
+(Sytem Time(s), TpmTime(ms)) = (2, 3826)
+(Sytem Time(s), TpmTime(ms)) = (3, 4841)
+(Sytem Time(s), TpmTime(ms)) = (4, 5850)
+
+================================================================================
+        Attestation
+================================================================================
+
+>> PCR Quoting
+Quoted PCR: TPMS_PCR_SELECTION {
+    TPM_ALG_ID hash = SHA (0x04)
+    UINT8 sizeofSelect = 3 (0x03)
+    BYTE[] pcrSelect = [800000]
+}
+PCR-value digest: 3e7d249b f654a587 6df29425 1ae91a07 31a4eb44
+The quote was verified correctly
+The changed quote did not match, as expected
+>> Time Quoting
+Attested Time
+   Firmware Version:2015103000145006
+   Time:1d47
+   Clock:197c
+   ResetCount:0
+   RestartCount:0
+Time-quote validated
+>> Key Quoting
+Name of certified key:
+  0004ba63 c4bd0035 d2dd77f1 5eef9f25 c159cf91 47ab
+Qualified name of certified key:
+  0004999f abe7aabe c74761ef 32f6c99c b69f7b43 efb8
+Key certification validated
+Key creation certification validated
+Key creation certification validated
+
+================================================================================
+        Administration
+================================================================================
+
+Name before clear 00044e54 8c7398bf 2bd3ce04 0685eb92 7fd467a8 ba97
+Name after clear  0004a911 70eee595 ddff528b e17760c7 def06888 539c
+
+================================================================================
+        PolicyCpHashSample
+================================================================================
+
+Command Clear() authorized by policy session with PolicyCpHash assertion
+
+================================================================================
+        PolicyCounterTimerSample
+================================================================================
+
+The TPM operations should start failing in about 5 seconds...
+Succeeded at 0
+Succeeded at 1
+Succeeded at 2
+Succeeded at 3
+Succeeded at 4
+Failed at 6
+Failed at 7
+Failed at 8
+
+================================================================================
+        PolicyWithPasswords
+================================================================================
+
+
+================================================================================
+        Unseal
+================================================================================
+
+Unsealed data: 01020304 050f0e0d 0a0908
+
+================================================================================
+        Serializer
+================================================================================
+
+TPMT_PUBLIC Original and Original->Binary->Reconstituted are the same
+PcrVals:
+PCR_ReadResponse {
+    UINT32 pcrUpdateCounter = 74 (0x4A)
+    UINT32 pcrSelectionOutCount = 2 (0x02)
+    TPMS_PCR_SELECTION[] pcrSelectionOut = [
+        TPMS_PCR_SELECTION {
+            TPM_ALG_ID hash = SHA (0x04)
+            UINT8 sizeofSelect = 3 (0x03)
+            BYTE[] pcrSelect = [010000]
+        }
+        TPMS_PCR_SELECTION {
+            TPM_ALG_ID hash = SHA256 (0x0B)
+            UINT8 sizeofSelect = 3 (0x03)
+            BYTE[] pcrSelect = [020000]
+        }
+    ]
+    UINT32 pcrValuesCount = 2 (0x02)
+    TPM2B_DIGEST[] pcrValues = [
+        TPM2B_DIGEST {
+            UINT16 size = 20 (0x14)
+            BYTE[] buffer = [F49444B7 C90D4ECD 25760163 6C182AD7 7F7A090E]
+        }
+        TPM2B_DIGEST {
+            UINT16 size = 32 (0x20)
+            BYTE[] buffer = [97B21F3F 2361837E 0A4C738B DCC3589B C9083E5A 441DB98B 40113CEA 1AC90DEB]
+        }
+    ]
+}
+Binary form:
+0000004a 00000002 00040301 0000000b 03020000 00000002 0014f494 44b7c90d 4ecd2576 01636c18 2ad77f7a 090e0020 97b21f3f 2361837e 0a4c738b dcc3589b c9083e5a 441db98b 40113cea 1ac90deb
+PCR Original and Original->Binary->Reconstituted are the same
+JSON-serialized PCR values:
+{
+    "pcrUpdateCounter" : 74,
+    "pcrSelectionOutCount" : 2,
+    "pcrSelectionOut" : [
+        {
+            "hash" : 4,
+            "sizeofSelect" : 3,
+            "pcrSelect" : [1, 0, 0]
+        },
+        {
+            "hash" : 11,
+            "sizeofSelect" : 3,
+            "pcrSelect" : [2, 0, 0]
+        }
+    ],
+    "pcrValuesCount" : 2,
+    "pcrValues" : [
+        {
+            "size" : 20,
+            "buffer" : [244, 148, 68, 183, 201, 13, 78, 205, 37, 118, 1, 99, 108, 24, 42, 215, 127, 122, 9, 14]
+        },
+        {
+            "size" : 32,
+            "buffer" : [151, 178, 31, 63, 35, 97, 131, 126, 10, 76, 115, 139, 220, 195, 88, 155, 201, 8, 62, 90, 68, 29, 185, 139, 64, 17, 60, 234, 26, 201, 13, 235]
+        }
+    ]
+}
+JSON serializer of PCR values OK
+JSON-serialized signing key info: {
+    "outPrivate" : {
+        "size" : 114,
+        "buffer" : [0, 20, 231, 2, 115, 133, 140, 204, 248, 161, 175, 187, 157, 158, 32, 12, 113, 115, 171, 145, 46, 5, 0, 16, 193, 58, 105, 208, 11, 32, 29, 54, 176, 95, 180, 17, 118, 203, 77, 42, 150, 60, 221, 124, 1, 147, 144, 73, 112, 51, 52, 84, 197, 42, 107, 72, 159, 254, 147, 142, 49, 220, 132, 150, 48, 9, 147, 63, 80, 19, 21, 95, 198, 98, 136, 22, 114, 192, 13, 33, 79, 111, 146, 92, 45, 86, 40, 62, 235, 143, 39, 220, 65, 23, 211, 11, 224, 28, 7, 131, 39, 190, 139, 100, 248, 68, 39, 98, 161, 122, 217, 91, 77, 32]
+    },
+    "outPublic" : {
+        "type" : 1,
+        "nameAlg" : 4,
+        "objectAttributes" : 262258,
+        "authPolicySize" : 0,
+        "authPolicy" : [],
+        "parameters" : {
+            "symmetric" : {
+                "algorithm" : 16,
+                "keyBits" : 0,
+                "mode" : 16
+            },
+            "schemeScheme" : 22,
+            "scheme" : {
+                "hashAlg" : 4
+            },
+            "keyBits" : 1024,
+            "exponent" : 65537
+        },
+        "unique" : {
+            "size" : 128,
+            "buffer" : [181, 45, 222, 74, 63, 130, 5, 85, 54, 146, 167, 167, 7, 120, 113, 54, 20, 85, 205, 162, 80, 80, 119, 103, 22, 100, 250, 188, 77, 170, 214, 195, 120, 224, 135, 116, 151, 71, 85, 175, 144, 39, 42, 130, 139, 149, 97, 167, 169, 82, 105, 197, 20, 11, 209, 96, 103, 205, 134, 29, 50, 223, 209, 254, 208, 243, 222, 151, 82, 149, 236, 121, 52, 255, 50, 210, 163, 129, 226, 100, 219, 45, 84, 173, 71, 126, 132, 199, 185, 89, 157, 13, 15, 64, 254, 253, 223, 225, 175, 199, 156, 113, 56, 104, 241, 99, 141, 18, 110, 100, 10, 206, 228, 83, 92, 99, 46, 223, 109, 76, 191, 252, 199, 89, 246, 221, 119, 145]
+        }
+    },
+    "creationData" : {
+        "pcrSelectCount" : 0,
+        "pcrSelect" : [],
+        "pcrDigestSize" : 20,
+        "pcrDigest" : [218, 57, 163, 238, 94, 107, 75, 13, 50, 85, 191, 239, 149, 96, 24, 144, 175, 216, 7, 9],
+        "locality" : 1,
+        "parentNameAlg" : 4,
+        "parentNameSize" : 22,
+        "parentName" : [0, 4, 104, 176, 65, 170, 146, 97, 140, 185, 238, 20, 74, 164, 96, 96, 202, 214, 89, 119, 228, 207],
+        "parentQualifiedNameSize" : 22,
+        "parentQualifiedName" : [0, 4, 73, 46, 202, 172, 2, 120, 2, 222, 152, 171, 217, 248, 85, 46, 114, 53, 64, 71, 87, 166],
+        "outsideInfoSize" : 0,
+        "outsideInfo" : []
+    },
+    "creationHashSize" : 20,
+    "creationHash" : [214, 251, 119, 46, 247, 38, 32, 71, 236, 10, 28, 186, 196, 217, 221, 224, 26, 125, 3, 33],
+    "creationTicket" : {
+        "tag" : 32801,
+        "hierarchy" : {
+            "handle" : 1073741825
+        },
+        "digestSize" : 32,
+        "digest" : [249, 118, 57, 183, 103, 56, 14, 127, 135, 153, 198, 164, 32, 136, 170, 59, 224, 160, 69, 123, 164, 159, 232, 129, 98, 1, 232, 47, 56, 223, 120, 132]
+    }
+}
+JSON serializer of TPM key-container is OK
+TEXT-serialized signing key info:
+CreateResponse {
+    TPM2B_PRIVATE outPrivate = TPM2B_PRIVATE {
+        UINT16 size = 114 (0x72)
+        BYTE[] buffer = [
+            0014E702 73858CCC F8A1AFBB 9D9E200C 7173AB91 2E050010 C13A69D0 0B201D36
+            B05FB411 76CB4D2A 963CDD7C 01939049 70333454 C52A6B48 9FFE938E 31DC8496
+            3009933F 5013155F C6628816 72C00D21 4F6F925C 2D56283E EB8F27DC 4117D30B
+            E01C0783 27BE8B64 F8442762 A17AD95B4D20
+        ]
+    }
+    TPMT_PUBLIC outPublic = TPMT_PUBLIC {
+        TPM_ALG_ID type = FIRST (0x01)
+        TPM_ALG_ID nameAlg = SHA (0x04)
+        TPMA_OBJECT objectAttributes = fixedTPM | fixedParent | sensitiveDataOrigin | userWithAuth | sign (0x040072)
+        UINT16 authPolicySize = 0 (0x00)
+        BYTE[] authPolicy = []
+        TPMU_PUBLIC_PARMS parameters = TPMS_RSA_PARMS {
+            TPMT_SYM_DEF_OBJECT symmetric = TPMT_SYM_DEF_OBJECT {
+                TPM_ALG_ID algorithm = _NULL (0x10)
+                UINT16 keyBits = 0 (0x00)
+                TPM_ALG_ID mode = _NULL (0x10)
+            }
+            TPM_ALG_ID schemeScheme = RSAPSS (0x16)
+            TPMU_ASYM_SCHEME scheme = TPMS_SIG_SCHEME_RSAPSS {
+                TPM_ALG_ID hashAlg = SHA (0x04)
+            }
+            UINT16 keyBits = 1024 (0x0400)
+            UINT32 exponent = 65537 (0x010001)
+        }
+        TPMU_PUBLIC_ID unique = TPM2B_PUBLIC_KEY_RSA {
+            UINT16 size = 128 (0x80)
+            BYTE[] buffer = [
+                B52DDE4A 3F820555 3692A7A7 07787136 1455CDA2 50507767 1664FABC 4DAAD6C3
+                78E08774 974755AF 90272A82 8B9561A7 A95269C5 140BD160 67CD861D 32DFD1FE
+                D0F3DE97 5295EC79 34FF32D2 A381E264 DB2D54AD 477E84C7 B9599D0D 0F40FEFD
+                DFE1AFC7 9C713868 F1638D12 6E640ACE E4535C63 2EDF6D4C BFFCC759 F6DD7791
+            ]
+        }
+    }
+    TPMS_CREATION_DATA creationData = TPMS_CREATION_DATA {
+        UINT32 pcrSelectCount = 0 (0x00)
+        TPMS_PCR_SELECTION[] pcrSelect = []
+        UINT16 pcrDigestSize = 20 (0x14)
+        BYTE[] pcrDigest = [DA39A3EE 5E6B4B0D 3255BFEF 95601890 AFD80709]
+        TPMA_LOCALITY locality = LOC_ZERO (0x01)
+        TPM_ALG_ID parentNameAlg = SHA (0x04)
+        UINT16 parentNameSize = 22 (0x16)
+        BYTE[] parentName = [000468B0 41AA9261 8CB9EE14 4AA46060 CAD65977E4CF]
+        UINT16 parentQualifiedNameSize = 22 (0x16)
+        BYTE[] parentQualifiedName = [0004492E CAAC0278 02DE98AB D9F8552E 7235404757A6]
+        UINT16 outsideInfoSize = 0 (0x00)
+        BYTE[] outsideInfo = []
+    }
+    UINT16 creationHashSize = 20 (0x14)
+    BYTE[] creationHash = [D6FB772E F7262047 EC0A1CBA C4D9DDE0 1A7D0321]
+    TPMT_TK_CREATION creationTicket = TPMT_TK_CREATION {
+        TPM_ST tag = 32801 (0x8021)
+        TPM_HANDLE hierarchy = TPM_HANDLE {
+            UINT32 handle = 1073741825 (0x40000001)
+        }
+        UINT16 digestSize = 32 (0x20)
+        BYTE[] digest = [F97639B7 67380E7F 8799C6A4 2088AA3B E0A0457B A49FE881 6201E82F 38DF7884]
+    }
+}
+TEXT-serialized PCR values:
+PCR_ReadResponse {
+    UINT32 pcrUpdateCounter = 74 (0x4A)
+    UINT32 pcrSelectionOutCount = 2 (0x02)
+    TPMS_PCR_SELECTION[] pcrSelectionOut = [
+        TPMS_PCR_SELECTION {
+            TPM_ALG_ID hash = SHA (0x04)
+            UINT8 sizeofSelect = 3 (0x03)
+            BYTE[] pcrSelect = [010000]
+        }
+        TPMS_PCR_SELECTION {
+            TPM_ALG_ID hash = SHA256 (0x0B)
+            UINT8 sizeofSelect = 3 (0x03)
+            BYTE[] pcrSelect = [020000]
+        }
+    ]
+    UINT32 pcrValuesCount = 2 (0x02)
+    TPM2B_DIGEST[] pcrValues = [
+        TPM2B_DIGEST {
+            UINT16 size = 20 (0x14)
+            BYTE[] buffer = [F49444B7 C90D4ECD 25760163 6C182AD7 7F7A090E]
+        }
+        TPM2B_DIGEST {
+            UINT16 size = 32 (0x20)
+            BYTE[] buffer = [97B21F3F 2361837E 0A4C738B DCC3589B C9083E5A 441DB98B 40113CEA 1AC90DEB]
+        }
+    ]
+}
+TEXT serializer of PCR values OK
+TEXT serializer of TPM key-container is OK
+
+================================================================================
+        SessionEncryption
+================================================================================
+
+Return parameter encryption succeeded
+
+================================================================================
+        ImportDuplicate
+================================================================================
+
+Duplicated private key:DuplicateResponse {
+    UINT16 encryptionKeyOutSize = 0 (0x00)
+    BYTE[] encryptionKeyOut = []
+    TPM2B_PRIVATE duplicate = TPM2B_PRIVATE {
+        UINT16 size = 138 (0x8A)
+        BYTE[] buffer = [00880001 00000000 0080FC2C B25C6BA2 ... 3C52EC03 C7FFE097 8701D1E6 C4A2F1A3]
+    }
+    UINT16 outSymSeedSize = 0 (0x00)
+    BYTE[] outSymSeed = []
+}Signature with imported key: TPMS_SIGNATURE_RSASSA {
+    TPM_ALG_ID hash = SHA (0x04)
+    UINT16 sigSize = 256 (0x0100)
+    BYTE[] sig = [437038C4 2F8DB8C2 992E738D FABB85CA ... 82948BA3 4CCB5533 29F95B13 B52CB654]
+}
+Imported SW-key works
+
+================================================================================
+        MiscAdmin
+================================================================================
+
+Algorithms to be tested: 0
+Tried to advance the clock by 10000000
+actual =               10000001
+PP-Clear - OK
+New PCR-set: SHA        0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23
+New PCR-set: SHA256     0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23
+
+================================================================================
+        RsaEncryptDecrypt
+================================================================================
+
+Data to encrypt: e5e9fa1b a31ecd1a e84f75ca aa474f3a 663f05f4
+RSA-encrypted data: 5f6184b1 3fcc639c a81a1747 95730a76 37cc4d6a 028751ea 73fe5dc8 29eeb1dd cc4f924a b23f0d8d e31c8f77 b87c2992 9b34c3f5 5fbf54f5 c2f63861 a4ec8e55 84ba8054 12188322 07bb264c 0d93c1ad f1407479 478c5120 96200ceb d1a1f836 2aaf2a4c fab12c59 265545e4 69183a0b 4de08536 7e42a325 97cd3f82 677e695f ae2cfd7b e04b820b d71fb611 4a0d1f54 82c9d7e3 1335837a 2d5df557 aa6aad85 6c352fc4 c65700bd 3f16d6a5 d1f6b771 b7cdd3cf 63fc655e 48c79691 498ee9af 95736aa3 2105c47e 65ea37d3 9d72730c b27f5943 2ff670b3 7ec4b8e3 98b46ef3 beb13419 86099619 5acf96da 3ff271e2 a09375d2 95bae16d 73050a62 9153f986
+decrypted data: e5e9fa1b a31ecd1a e84f75ca aa474f3a 663f05f4
+Decryption worked
+My           secret: 0c20edba 64b559e9 a7aaaee4 db70478c 420b3397
+My decrypted secret: 0c20edba 64b559e9 a7aaaee4 db70478c 420b3397
+My           secret: 0c20edba 64b559e9 a7aaaee4 db70478c 420b3397
+My decrypted secret: 0c20edba 64b559e9 a7aaaee4 db70478c 420b3397
+
+================================================================================
+        Audit
+================================================================================
+
+TPM reported command digest:884652b9 89ec43ad 87c1f481 2e55b2d7 3415725b
+TSS.C++ calculated         :884652b9 89ec43ad 87c1f481 2e55b2d7 3415725b
+Command audit quote OK
+Session audit quote OK
+
+================================================================================
+        ActivateCredential
+================================================================================
+
+Secret:                         1c5dfcde 5a22261c 9e82a9fb 8e6e8fa0 b369b262
+Secret recovered from Activate: 1c5dfcde 5a22261c 9e82a9fb 8e6e8fa0 b369b262
+TPM-created activation blob: Secret recovered from Activate: 1c5dfcde 5a22261c 9e82a9fb 8e6e8fa0 b369b262
+
+================================================================================
+        SoftwareKeys
+================================================================================
+
+External key imported into the TPM works for signing
+Key created in the TPM and then exported can sign (as expected)
+External key imported into the TPM works for signing
+Key created in the TPM and then exported can sign (as expected)
+External key imported into the TPM works for signing
+Key created in the TPM and then exported can sign (as expected)
+
+================================================================================
+        PolicySigned
+================================================================================
+
+PolicySigned policy digest is correct
+
+================================================================================
+        PolicyAuthorize
+================================================================================
+
+PolicyAuthorize digest is correct
+
+================================================================================
+        PolicySecretSample
+================================================================================
+
+PolicySecret session hash = 05eb37f4 644fdff8 336f8f70 1111d204 781087cb
+
+================================================================================
+        EncryptDecryptSample
+================================================================================
+
+AES encryption
+in:  01020304 05040302 0c030405
+enc: aac93fc7 838284d5 3a75a4f4
+dec: 01020304 05040302 0c030405
+
+================================================================================
+        PolicyWithPasswords
+================================================================================
+
+
+================================================================================
+        SeededSession
+================================================================================
+
+
+================================================================================
+        PolicyNV
+================================================================================
+
+
+================================================================================
+        PolicyNameHashSample
+================================================================================
+
+Command Clear() authorized by policy session with PolicyNameHash assertion
+
+================================================================================
+        RewrapSample
+================================================================================
+
+
+================================================================================
+        BoundSession
+================================================================================
+
+
+================================================================================
+        NVX
+================================================================================
+
+Prepared policy session
+Created NV slot under Platform hierarchy
+Platform NV slot pub:NV_ReadPublicResponse {
+    TPMS_NV_PUBLIC nvPublic = TPMS_NV_PUBLIC {
+        TPM_HANDLE nvIndex = TPM_HANDLE {
+            UINT32 handle = 16779689 (0x010009A9)
+        }
+        TPM_ALG_ID nameAlg = SHA (0x04)
+        TPMA_NV attributes = AUTHWRITE | EXTEND | POLICY_DELETE | AUTHREAD | PLATFORMCREATE (0x40040444)
+        UINT16 authPolicySize = 20 (0x14)
+        BYTE[] authPolicy = [BF2092A6 ECBE1A5E 337BDECD 099B1DD9 CBECD082]
+        UINT16 dataSize = 20 (0x14)
+    }
+    UINT16 nvNameSize = 22 (0x16)
+    BYTE[] nvName = [0004343F CD14CF2F EA12886B 9813A2F4 F14C982FF712]
+}
+Trying deletion with empty policy first...
+Failed to delete the Platform NV slot without the proper policy
+Deleted the Platform NV slot.
+---- NVX successfully finished ----
+
+================================================================================
+        Processing callback data
+================================================================================
+
+Commands invoked:
+                           FIRST: count = 2
+                    EvictControl: count = 7
+                HierarchyControl: count = 2
+                NV_UndefineSpace: count = 14
+                       ChangeEPS: count = 1
+                       ChangePPS: count = 1
+                           Clear: count = 14
+                    ClearControl: count = 2
+                        ClockSet: count = 2
+             HierarchyChangeAuth: count = 17
+                  NV_DefineSpace: count = 11
+                    PCR_Allocate: count = 2
+               PCR_SetAuthPolicy: count = 4
+                     PP_Commands: count = 2
+                SetPrimaryPolicy: count = 24
+                 ClockRateAdjust: count = 2
+                   CreatePrimary: count = 36
+           GetCommandAuditDigest: count = 3
+                    NV_Increment: count = 8
+                      NV_SetBits: count = 64
+                       NV_Extend: count = 1
+                        NV_Write: count = 10
+                    NV_WriteLock: count = 1
+       DictionaryAttackLockReset: count = 2
+      DictionaryAttackParameters: count = 1
+                   NV_ChangeAuth: count = 1
+                       PCR_Event: count = 22
+                       PCR_Reset: count = 4
+                SequenceComplete: count = 3
+       SetCommandCodeAuditStatus: count = 4
+             IncrementalSelfTest: count = 1
+                        SelfTest: count = 1
+                         Startup: count = 2
+                        Shutdown: count = 3
+                      StirRandom: count = 6
+              ActivateCredential: count = 2
+                         Certify: count = 1
+                        PolicyNV: count = 2
+                 CertifyCreation: count = 1
+                       Duplicate: count = 5
+                         GetTime: count = 1
+           GetSessionAuditDigest: count = 1
+                         NV_Read: count = 74
+                ObjectChangeAuth: count = 3
+                    PolicySecret: count = 1
+                          Rewrap: count = 1
+                          Create: count = 14
+                            HMAC: count = 12
+                          Import: count = 3
+                            Load: count = 16
+                           Quote: count = 2
+                     RSA_Decrypt: count = 3
+                      HMAC_Start: count = 8
+                  SequenceUpdate: count = 31
+                            Sign: count = 13
+                          Unseal: count = 4
+                    PolicySigned: count = 2
+                     ContextLoad: count = 1
+                     ContextSave: count = 1
+                  EncryptDecrypt: count = 2
+                    FlushContext: count = 117
+                    LoadExternal: count = 7
+                  MakeCredential: count = 1
+                   NV_ReadPublic: count = 8
+                 PolicyAuthorize: count = 1
+                 PolicyAuthValue: count = 2
+               PolicyCommandCode: count = 10
+              PolicyCounterTimer: count = 8
+                    PolicyCpHash: count = 2
+                  PolicyLocality: count = 8
+                  PolicyNameHash: count = 2
+                        PolicyOR: count = 4
+                      ReadPublic: count = 18
+                     RSA_Encrypt: count = 1
+                StartAuthSession: count = 56
+                 VerifySignature: count = 9
+                   GetCapability: count = 184
+                       GetRandom: count = 7
+                   GetTestResult: count = 1
+                            Hash: count = 2
+                        PCR_Read: count = 16
+                       PolicyPCR: count = 9
+                   PolicyRestart: count = 4
+                       ReadClock: count = 8
+                      PCR_Extend: count = 2
+                PCR_SetAuthValue: count = 3
+                      NV_Certify: count = 1
+           EventSequenceComplete: count = 1
+               HashSequenceStart: count = 3
+          PolicyPhysicalPresence: count = 4
+                 PolicyGetDigest: count = 9
+                  PolicyPassword: count = 9
+
+Responses received:
+                         SUCCESS: count = 943
+                      ATTRIBUTES: count = 5
+                           VALUE: count = 9
+                          HANDLE: count = 7
+                       AUTH_FAIL: count = 6
+                              PP: count = 1
+                       SIGNATURE: count = 1
+                     POLICY_FAIL: count = 8
+                        BAD_AUTH: count = 1
+                       POLICY_CC: count = 1
+                        DISABLED: count = 1
+                       AUTH_TYPE: count = 1
+                          POLICY: count = 4
+                AUTH_UNAVAILABLE: count = 4
+                NV_UNINITIALIZED: count = 3
+                        LOCALITY: count = 3
+                    REFERENCE_H0: count = 3
+
+Commands not exercised:
+NV_GlobalWriteLock SetAlgorithmSet NV_ReadLock ECDH_ZGen ECDH_KeyGen PolicyTicket ECC_Parameters PolicyDuplicationSelect TestParms Commit ZGen_2Phase EC_Ephemeral PolicyNvWritten
+
+D:\Work\Datanchor.io\TSS.MSR\TSS.CPP\bin\x64\Debug\TSS.CPP Samples.exe (process 14484) exited with code 0.
+Press any key to close this window . . .

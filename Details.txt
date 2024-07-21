@@ -1,0 +1,134 @@
+Store encryption keys securely within the TPM instead of software or filesystem storage.
+Use TPM to generate cryptographic keys (e.g., AES keys) securely.
+
+
+Secure File Encryption Key Storage:
+	When a user encrypts a file, the encryption key is generated and stored in the TPM.
+	The TPM-protected key is then used for encryption operations, ensuring that the key never leaves the secure environment of the TPM.
+
+File Encryption and Decryption Process:
+	Upon attempting to access an encrypted file, the application requests the TPM to unseal the encryption key.
+	The TPM verifies the system's state and, if valid, provides the key for decryption.
+	The file is then decrypted, and access is granted to the user.
+
+
+Performance and Usability:
+	Assess the impact of TPM-based encryption on system performance.
+	Explore user experience considerations and develop strategies to minimize any negative impacts.
+
+----------------
+
+Hi Hari, what would be the TPM use cases in our Agent? I can think of following.
+
+Use cases of TPM in agent:
+	To generate file keys (AES keys)
+	To store private keys associated with client certificates (agent's user-level/service-level client certificates)
+	To store Offline Master key
+	To store the secret cloud constants
+
+----------------
+
+Official TPM 2.0 Reference Implementation (by Microsoft)
+https://github.com/microsoft/ms-tpm-20-ref
+
+TSS.MSR
+https://github.com/microsoft/TSS.MSR
+
+----------------
+
+I want to integrate Microsoft's TPM 2.0 TSS C++ library into my application for the following use cases.
+1. Use TPM to generate file keys (AES keys)
+2. To store private keys associated with client certificates
+3. To store Master key
+4. To store the secret cloud constants
+
+=>
+To integrate Microsoft's TPM 2.0 TSS (Trusted Platform Module) C++ library into your application for the specified use cases, follow these steps:
+
+Set Up Your Development Environment:
+	Ensure you have a TPM 2.0 device on your system. If you're using a virtual machine or testing environment, you can use a software TPM like Microsoft's TPM simulator.
+	Install the necessary tools and libraries. You might need tpm2-tss and related dependencies. On Windows, you can find the library on GitHub at tpm2-tss.
+Include the TSS Library in Your Project:
+	Clone the repository and include the library in your project.
+	Link against the TSS library in your build configuration.
+Initialize the TPM Context:
+	Initialize the TPM context and establish a session to communicate with the TPM.
+Generating AES Keys:
+	Use the TPM to generate AES keys for encrypting files.
+	Create a primary key in the storage hierarchy.
+	Use the primary key to derive AES keys.
+Storing Private Keys for Client Certificates:
+	Load your client certificate's private key into the TPM.
+	Use TPM key handles to reference these keys securely.
+Storing a Master Key:
+	Similar to storing private keys, generate or import a master key into the TPM.
+	Use this key for various cryptographic operations as needed by your application.
+Storing Secret Cloud Constants:
+	Use the TPM's NV (Non-Volatile) storage to store sensitive constants.
+	This ensures that the constants remain secure and tamper-resistant.
+
+----------------
+
+What are the available TSS (TPM Software Stack) libraries for C++?
+
+The TPM (Trusted Platform Module) Software Stack (TSS) libraries for C++ facilitate interaction with TPM hardware for various security functionalities. Here are some of the notable TSS libraries available for C++:
+
+TPM 2.0 TSS (TSS2) by the Trusted Computing Group (TCG):
+	Description: The official TSS implementation by TCG, which supports TPM 2.0.
+	Components:
+	ESAPI (Enhanced System API): High-level API for application development.
+	SAPI (System API): Mid-level API for system-level access.
+	TCTI (Transmission Interface): Low-level communication interface.
+	Language Support: Primarily C, but can be used with C++.
+	Repository: tpm2-tss on GitHub
+IBM's TPM2-TSS:
+	Description: IBM's implementation of the TCG TSS for TPM 2.0, providing APIs for interacting with TPM devices.
+	Components:
+	TSS2: Libraries for various levels of TPM interaction (e.g., TCTI, SAPI, ESAPI).
+	Language Support: Primarily C, but compatible with C++.
+	Repository: IBM's tpm2-tss on GitHub
+Intel's TPM2.0-TSS:
+	Description: Intel's implementation of the TPM 2.0 TSS, providing APIs to utilize TPM functionalities.
+	Components:
+	TSS2: Includes SAPI, ESAPI, and TCTI layers.
+	Language Support: Primarily C, with C++ compatibility.
+	Repository: Intel's tpm2-tss on GitHub
+Microsoft's TPM Software Stack (TSS.MSR):
+	Description: Microsoft's implementation of the TSS for TPM 2.0.
+	Components: Includes various libraries and tools for TPM 2.0 interactions.
+	Language Support: Primarily C and C++.
+	Repository: TSS.MSR on GitHub
+TrouSerS (The open-source TCG Software Stack):
+	Description: An open-source implementation of the TCG Software Stack, supporting TPM 1.2 and TPM 2.0.
+	Components: Provides a library for integrating TPM functionalities.
+	Language Support: Primarily C, but can be integrated with C++.
+	Repository: TrouSerS on SourceForge
+
+These libraries offer varying levels of abstraction and functionality, making it easier to develop TPM-enabled applications in C++. The repositories provided include documentation and examples to help developers get started with TPM programming.
+
+----------------
+
+TSS.MSR v2.0 TPM2 Simulator.zip
+https://www.microsoft.com/en-us/download/details.aspx?id=52507
+
+TSS.MSR: The TPM Software Stack from Microsoft Research
+In addition to physical TPM devices, the TSS.MSR libraries can also connect to a TPM simulator to enable application development and debugging on platforms that do not have a TPM 2.0 device. Last published: December 18, 2015.
+
+The connection to the simulator is over a TCP/IP socket so the simulator may be running on a remote machine or in another process on the same machine. Below you will find a link to download the TPM2 Simulator binary for use with the TSS.MSR TPM2 libraries.
+
+----------------
+
+Integrate TPM 2.0 for Security
+https://chatgpt.com/share/8ba4a964-9f0c-46df-8a53-ad7fd71cb94a
+
+Available TSS Libraries C++
+https://chatgpt.com/share/f42e4c75-eca7-4f6d-8748-d40ca5e0b065
+
+----------------
+
+WMI - TPM Namespace to connect
+	Run wbemtest command as administrator
+	connect to the TPM namespace root\CIMv2\Security\MicrosoftTpm
+	Use the WMI TPM class Win32_Tpm to interact with TPM (e.g. SELECT * FROM Win32_Tpm)
+
+----------------
